@@ -6,6 +6,7 @@
 {% block body %}
 
 	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		<h1>Book List</h1>
 		{% if is_granted('ROLE_ADMIN') %}
 			<button class="btn btn-success">
 				<a href="{{ path('app_books_add_book')}}" class="text-white text-decoration-none">+ Add a book</a>

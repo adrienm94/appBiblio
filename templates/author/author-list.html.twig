@@ -6,14 +6,15 @@
 {% block body %}
 
 	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		<h1>Author List</h1>
 		{% if is_granted('ROLE_ADMIN') %}
 			<button class="btn btn-success">
 				<a href="{{ path('app_authors_add_author')}}" class="text-white text-decoration-none">+ Add an author</a>
 			</button>
 		{% endif %}
-		<section class="author-list">
+		<section class="author-list bg-light my-3">
 			{% for author in authors %}
-				<article class="author border">
+				<article class="author border p-3">
 					<h2>{{ author.firstName|e }}
 						{{ author.lastName|e }}</h2>
 					<p>{{ author.bio|e }}</p>

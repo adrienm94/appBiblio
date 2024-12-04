@@ -6,7 +6,8 @@
 {% block body %}
 
 	{% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') %}
-		<div class="form-book">
+		<div class="form-author">
+            <h1>Author Form</h1>
 			{{ form(author_form) }}
 			</div>
 		{% endif %}
