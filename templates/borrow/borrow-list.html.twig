@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Borrow list
+{% endblock %}
+
+{% block body %}
+
+	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		<div class="borrow-list">
+			<table class="table">
+				<tr>
+					<th>Borrower</th>
+					<th>Borrowed book title</th>
+					<th>Borrow date</th>
+					<th>Borrow status</th>
+					<th>Give back a book</th>
+				</tr>
+				{% for borrow in borrows %}
+					<tr>
+						<td>{{ borrow.user.name|e }}</td>
+						<td>{{ borrow.book.title|e }}</td>
+						<td>{{ borrow.borrowDate|date('Y-m-d')|e }}</td>
+						<td>{{ borrow.status|e }}</td>
+						<td>
+							{% if borrow.status == "en cours" %}
+								<button class="borrow-btn btn btn-primary">
+									<a href="{{path('app_borrows_end_borrow', {id:borrow.id})}}" class="text-white text-decoration-none">Give back</a>
+								</button>
+							{% else %}
+								<p>/</p>
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+
+{% block body %}
+
+	{% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') %}
+		{% if register_or_edit == 'register' %}
+			<h1>Register User</h1>
+		{% elseif register_or_edit == 'edit'%}
+			<h1>Edit user</h1>
+		{% endif %}
+
+
+		{{ form_errors(registration_form) }}
+
+		{{ form_start(registration_form) }}
+		{{ form_row(registration_form.name) }}
+		{{ form_row(registration_form.email) }}
+		{{ form_row(registration_form.roles) }}
+		{{ form_row(registration_form.plainPassword, {label: 'Password'}) }}
+		{{ form_row(registration_form.agreeTerms) }}
+
+		{% if register_or_edit == 'register' %}
+			<button type="submit" class="btn">Register</button>
+		{% elseif register_or_edit == 'edit'%}
+			<button type="submit" class="btn">Edit</button>
+		{% endif %}
+		{{ form_end(registration_form) }}
+	{% endif %}
+
+{% endblock %}

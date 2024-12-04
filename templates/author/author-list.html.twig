@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Author list
+{% endblock %}
+
+{% block body %}
+
+	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		{% if is_granted('ROLE_ADMIN') %}
+			<button class="btn btn-success">
+				<a href="{{ path('app_authors_add_author')}}" class="text-white text-decoration-none">+ Add an author</a>
+			</button>
+		{% endif %}
+		<section class="author-list">
+			{% for author in authors %}
+				<article class="author border">
+					<h2>{{ author.firstName|e }}
+						{{ author.lastName|e }}</h2>
+					<p>{{ author.bio|e }}</p>
+					{% if is_granted('ROLE_ADMIN') %}
+						<button class="btn btn-primary">
+							<a href="{{ path('app_authors_edit_author', {id:author.id})}}" class="text-white text-decoration-none">Edit</a>
+						</button>
+						<button class="btn btn-danger">
+							<a href="{{ path('app_authors_delete_author', {id:author.id})}}" class="text-white text-decoration-none">Delete</a>
+						</button>
+					{% endif %}
+				</article>
+
+			{% endfor %}
+		</section>
+	{% endif %}
+{% endblock %}

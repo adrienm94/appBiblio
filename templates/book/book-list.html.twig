@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book list
+{% endblock %}
+
+{% block body %}
+
+	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		{% if is_granted('ROLE_ADMIN') %}
+			<button class="btn btn-success">
+				<a href="{{ path('app_books_add_book')}}" class="text-white text-decoration-none">+ Add a book</a>
+			</button>
+		{% endif %}
+		<div class="book-list">
+			<table class="table">
+				<tr>
+					<th>Title</th>
+					<th>Genre</th>
+					<th>Published At</th>
+					<th>Author</th>
+					<th>Borrow a book</th>
+					{% if is_granted('ROLE_ADMIN') %}
+						<th>Edit</th>
+						<th>Delete</th>
+					{% endif %}
+				</tr>
+				{% for book in books %}
+					<tr>
+						<td>{{ book.title|e }}</td>
+						<td>{{ book.genre|e }}</td>
+						<td>{{ book.publishedAt|date('Y-m-d')|e }}</td>
+						<td>{{ book.author.firstName|e }}
+							{{ book.author.lastName|e }}</td>
+						<td>
+							{% if book.borrows|length == 0 %}
+								<button class="borrow-btn btn btn-primary">
+									<a href="{{ path('app_borrows_begin_borrow', {idBook:book.id, idUser:user.id})}}" class="text-white text-decoration-none">Borrow</a>
+								</button>
+							{% else %}
+								{% for borrow in book.borrows|slice(book.borrows|length-1,book.borrows|length) %}
+									{% if borrow.status|e == "terminé" %}
+										<button class="borrow-btn btn btn-primary">
+											<a href="{{ path('app_borrows_begin_borrow', {idBook:book.id, idUser:user.id})}}" class="text-white text-decoration-none">Borrow</a>
+										</button>
+									{% else %}
+										<p>This book has been already borrowed.</p>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						</td>
+						{% if is_granted('ROLE_ADMIN') %}
+						<td><button class="btn btn-primary">
+							<a href="{{ path('app_books_edit_book', {id:book.id})}}" class="text-white text-decoration-none">Edit</a>
+						</button></id>
+						<td><button class="btn btn-danger">
+							<a href="{{ path('app_books_delete_book', {id:book.id})}}" class="text-white text-decoration-none">Delete</a>
+						</button></td>
+						
+					{% endif %}
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+	{% endif %}
+
+
+{% endblock %}

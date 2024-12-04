@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User list
+{% endblock %}
+
+{% block body %}
+
+	<div class="user-list">
+
+		{% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') %}
+			{% if is_granted('ROLE_ADMIN') %}
+				<button class="btn btn-success">
+					<a href="{{ path('app_users_register_user')}}" class="text-white text-decoration-none">+ Add a user</a>
+				</button>
+			{% endif %}
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Roles</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</tr>
+				{% for user in users %}
+					<tr>
+						<td>{{ user.name|e }}</td>
+						<td>{{ user.email|e }}</td>
+						<td>[
+							{% for role in user.roles %}
+								{{ role|e }},
+							{% endfor %}
+							]
+						</td>
+						{% if user.email != connectedUser.email %}
+							<td>
+								<button class="btn btn-primary">
+									<a href="{{ path('app_users_edit_user', {id:user.id})}}" class="text-white text-decoration-none">Edit</a>
+								</button>
+							</td>
+							<td>
+								<button class="btn btn-danger">
+									<a href="{{ path('app_users_delete_user', {id:user.id})}}" class="text-white text-decoration-none">Delete</a>
+								</button>
+							</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+		{% endif %}
+
+	</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Book Form
+{% endblock %}
+
+{% block body %}
+
+	{% if is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') %}
+		<div class="form-book">
+			{{ form(book_form) }}
+			</div>
+		{% endif %}
+
+	{% endblock %}
