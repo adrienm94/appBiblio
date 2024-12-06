@@ -123,6 +123,15 @@ De plus, lorsqu'un utilisateur demande une route existante, si celui-ci est déc
 
 ## Fonctionnalités principales
 
+### Architecture MVC
+
+Nous adoptons une structure Model-View-Controller pour ce projet : 
+* Le Model englobe la logique des données, c'est-à-dire, comment elles sont définies et organisées, les opérations que l'on peut faire dessus.
+* Le Controller analyse la requête HTTP envoyée par le client et exécute le code associé pour la logique métier. Il permet d'adresser le Model, de récupérer les données du Model et de renvoyer ces dernières à la Vue dans la réponse HTTP.
+* La View s'occupe de l'interface graphique.
+
+### Ce que permet l'application
+
 L'application permet :
 
 * la gestion des livres :
@@ -138,6 +147,8 @@ L'application permet :
 
 **IMPORTANT : Les actions de création, modification et suppression doivent être réservées aux
 administrateurs. De plus, seul ces derniers ont accès aux utilisateurs (avec les opération CRUD associées).**
+
+Exemple : si je veux afficher les livres, la méthode *bookList* du Controller *BookController* est appelée. La route associée *app_book_list* aura pour chemin */user/app/books/book-list* en n'oubliant pas de préfixer *localhost:8000*. Pour chaque livre, les admins auront droit à un bouton bleu de modification redirigeant vers un formulaire, un bouton rouge de suppression. Les admins auront aussi en haut de la page un bouton vert d'ajout de livre redirigeant vers un formulaire.
 
 ## À ajouter
 
