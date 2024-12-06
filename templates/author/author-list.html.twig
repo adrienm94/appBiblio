@@ -12,8 +12,21 @@
 				<a href="{{ path('app_authors_add_author')}}" class="text-white text-decoration-none">+ Add an author</a>
 			</button>
 		{% endif %}
+		{% if search_form %}
+			<section class="search-form my-3">
+				{{ form(search_form) }}
+			</section>
+		{% endif %}
 		<section class="author-list bg-light my-3">
-			{% for author in authors %}
+			{% if not authors and not search_form %}
+				<p class="text-danger">No result found</p>
+			{% else %}
+
+				{% if authors and not search_form  %}
+					<p class="text-success">{{ authors|length }} result(s) found</p>
+				{% endif %}
+				
+				{% for author in authors %}
 				<article class="author border p-3">
 					<h2>{{ author.firstName|e }}
 						{{ author.lastName|e }}</h2>
@@ -27,8 +40,14 @@
 						</button>
 					{% endif %}
 				</article>
-
 			{% endfor %}
+			{% endif %}
 		</section>
+		{% if not search_form %}
+		<section class="my-3">
+			<button class="btn btn-primary"><a href="{{ path('app_author_list') }}" class="text-white text-decoration-none">Return to Author List</a></button>
+		</section>
+		{% endif %}
+		
 	{% endif %}
 {% endblock %}
