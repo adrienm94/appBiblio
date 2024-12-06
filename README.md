@@ -38,6 +38,44 @@ Ici *mysql* est le driver permettant de se connecter à la BD. Le *app* après l
 
 Le système de gestion de bases de données relationnelles utilisé est [MySQL](https://www.mysql.com/).
 
+Attention, étant donné que l'on a un système d'authentification et vu que la table User est vide lors de l'initialisation de la base de données, il faut insérer au moins un utilisateur admin pour pouvoir s'authentifier (pour plus de détails, se reporter à la section[Système d'authentification](#système-dauthentification)) :
+
+```sql
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int NOT NULL,
+  `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `roles` json NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `roles`, `password`, `name`) VALUES
+(1, 'admin.admin@admin.com', '[\"ROLE_ADMIN\"]', exempleDeMotDePasseHashe, 'admin');
+-- exempleDeMotDePasseHashe est à remplacer par votre propre mot de passe hashé
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`);
+
+  --
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+COMMIT;
+```
+
 * Pour simplifier la création d'une interface utilisateur, on utilise le framework CSS Bootstrap. Pour cela, on doit installer le composant AssetMapper :
 
 ```shell
@@ -50,16 +88,57 @@ On doit aussi préciser quel fichier css importer depuis Bootstrap :
 symfony console importmap:require bootstrap/dist/css/bootstrap.min.css
 ```
 
-Il faut maintenant importer le **bootstrap.min.css**. Normalement c'est déjà fait, sinon ajouter la ligne suivante Dans [assets/app.js](assets/app.js):
+Il faut maintenant importer le **bootstrap.min.css**. Normalement c'est déjà fait, sinon ajouter la ligne suivante en haut de [assets/app.js](assets/app.js):
 
 ```js
 import 'bootstrap/dist/css/bootstrap.min.css';
 ```
 
+* Pour démarrer l'application, on démarre le serveur de développement intégré à Symfony :
+```shell
+symfony server:start -d
+```
+L'option -d permet de faire tourner le serveur en arrière-plan. Par défaut, sur votre machine, l'URL commence par **localhost:8000**.
+Par exemple, pour aller sur la page de login, l'adresse web sera **localhost:8000/login**.
+
+## Sécurité
+
+La configuration sécuritaire est définie dans le fichier [security.yaml](config/packages/security.yaml).
+
+### Système d'authentification
+
+On implémente un système d'authentification pour différencier les utilisateurs
+administrateurs et standards. Cette différentiation est définie par l'attribut roles, qui est un tableau indexé :
+* ROLE_USER pour les utilisateurs standards
+* ROLE_ADMIN pour les administrateurs
 
 
+### Organisation des routes par préfixes
+Pour des raisons de sécurité, on crée des routes distinctes pour les fonctionnalités administratives et les fonctionnalités
+utilisateur. Les routes administratives auront un préfixe /admin/app et les routes utilisateurs /user/app.
+De plus, lorsqu'un utilisateur demande une route existante, si celui-ci est déconnecté ou n'a pas d'autorisation d'accès, alors il est redirigé automatiquement vers la page de connexion. 
 
+### Note
+**Pour une première utilisation, ne pas oublier d'abord de créer un admin dans la base de données via la table user.**
 
 ## Fonctionnalités principales
 
-> penser à expliquer authentification (security.yaml) + point d'entrée (symfony server:start sur localhost:8000 par défaut)
+L'application permet :
+
+* la gestion des livres :
+    * Visualisation des livres sous forme de tableau. Chaque livre a un titre, un auteur, un genre et une date de publication.
+    * Ajouter, modifier, et supprimer un livre
+* la gestion des auteurs :
+    * Visualisation des auteurs sous forme de liste. Chaque auteur a un nom, un prénom et une biographie.
+    * Ajouter, modifier, et supprimer un auteur
+* la gestion des emprunts :
+    * Visualisation des emprunts sous forme de tableau. Chaque emprunt a un nom d'utilisateur, le titre du livre emprunté et la date d'emprunt
+* la gestion des utilisateurs :
+    * Visualisation des utilisateurs sous forme de tableau.
+
+**IMPORTANT : Les actions de création, modification et suppression doivent être réservées aux
+administrateurs. De plus, seul ces derniers ont accès aux utilisateurs (avec les opération CRUD associées).**
+
+## À ajouter
+
+BONUS : Rechercher un livre par titre ou auteur.
