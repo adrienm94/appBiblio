@@ -137,9 +137,11 @@ L'application permet :
 * la gestion des livres :
     * Visualisation des livres sous forme de tableau. Chaque livre a un titre, un auteur, un genre et une date de publication.
     * Ajouter, modifier, et supprimer un livre
+    * Recherche de livre par son titre 
 * la gestion des auteurs :
     * Visualisation des auteurs sous forme de liste. Chaque auteur a un nom, un prénom et une biographie.
     * Ajouter, modifier, et supprimer un auteur
+    * Recherche d'auteur par son prénom
 * la gestion des emprunts :
     * Visualisation des emprunts sous forme de tableau. Chaque emprunt a un nom d'utilisateur, le titre du livre emprunté et la date d'emprunt
 * la gestion des utilisateurs :
@@ -149,7 +151,3 @@ L'application permet :
 administrateurs. De plus, seul ces derniers ont accès aux utilisateurs (avec les opération CRUD associées).**
 
 Exemple : si je veux afficher les livres, la méthode *bookList* du Controller *BookController* est appelée. La route associée *app_book_list* aura pour chemin */user/app/books/book-list* en n'oubliant pas de préfixer *localhost:8000*. Pour chaque livre, les admins auront droit à un bouton bleu de modification redirigeant vers un formulaire, un bouton rouge de suppression. Les admins auront aussi en haut de la page un bouton vert d'ajout de livre redirigeant vers un formulaire.
-
-## À ajouter
-
-BONUS : Rechercher un livre par titre ou auteur.
